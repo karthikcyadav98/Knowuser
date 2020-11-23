@@ -15,14 +15,17 @@ const IpList = ({navigation}) => {
 	const [ipdata, setIpdata] = useState([]);
 	const [isLoading, setLoading] = useState(true);
 
-	let unsubscribe;
+	let connection = {};
+	let unsubscribe = NetInfo.addEventListener(state => {
+		connection = state;
+	});
 
 	useEffect(
 		() => {
 			// AsyncStorage.clear();
 			getDetails();
 		},
-		[unsubscribe]
+		[unsubscribe, connection]
 	);
 
 	const getDetails = async () => {
@@ -70,6 +73,7 @@ const IpList = ({navigation}) => {
 				{/* <Appbar.BackAction onPress={() => navigation.goBack()} /> */}
 				<Appbar.Content title="Knowuser" />
 			</Appbar.Header>
+			<Text>{connection.type}</Text>
 			<FlatList
 				keyExtractor={item => item.date.toString()}
 				data={ipdata}
